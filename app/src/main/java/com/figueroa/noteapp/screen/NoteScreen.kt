@@ -1,5 +1,6 @@
 package com.figueroa.noteapp.screen
 
+import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -26,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -49,6 +51,7 @@ fun NoteScreen(
     var description by remember {
         mutableStateOf("")
     }
+    val context = LocalContext.current
     Column(modifier = Modifier.padding(6.dp)) {
         TopAppBar(title = { Text(text = stringResource(id = R.string.app_name)) }, actions = {
             Icon(imageVector = Icons.Rounded.Notifications, contentDescription = "Icon")
@@ -82,9 +85,15 @@ fun NoteScreen(
                 text = "Save",
                 onClick = {
                     if (title.isNotEmpty() && description.isNotEmpty()) {
-                        //Save/Add to the list
+                        onAddNote(
+                            Note(
+                                title = title,
+                                description = description
+                            )
+                        )
                         title = ""
                         description = ""
+                        Toast.makeText(context, "Note Added", Toast.LENGTH_SHORT).show()
                     }
                 }
             )
@@ -95,7 +104,7 @@ fun NoteScreen(
                 NoteRow(
                     note = note,
                     oneNoteClicked = {
-
+                        onRemoveNote(note)
                     }
                 )
             }
@@ -125,7 +134,7 @@ fun NoteRow(
     ) {
         Column(
             modifier
-                .clickable { }
+                .clickable { oneNoteClicked(note) }
                 .padding(horizontal = 16.dp, vertical = 8.dp), horizontalAlignment = Alignment.Start) {
             Text(text = note.title, style = MaterialTheme.typography.titleLarge)
             Text(text = note.description, style = MaterialTheme.typography.titleMedium)
