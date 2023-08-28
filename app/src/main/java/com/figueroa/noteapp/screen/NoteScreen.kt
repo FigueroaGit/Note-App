@@ -36,7 +36,7 @@ import com.figueroa.noteapp.components.NoteButton
 import com.figueroa.noteapp.components.NoteInputText
 import com.figueroa.noteapp.data.NotesDataSource
 import com.figueroa.noteapp.model.Note
-import java.time.format.DateTimeFormatter
+import com.figueroa.noteapp.util.formatDate
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -138,7 +138,7 @@ fun NoteRow(
                 .padding(horizontal = 16.dp, vertical = 8.dp), horizontalAlignment = Alignment.Start) {
             Text(text = note.title, style = MaterialTheme.typography.titleLarge)
             Text(text = note.description, style = MaterialTheme.typography.titleMedium)
-            Text(text = note.entryDate.format(DateTimeFormatter.ofPattern("EEE, d MMM")), style = MaterialTheme.typography.labelSmall)
+            Text(text = formatDate(note.entryDate.time), style = MaterialTheme.typography.labelSmall)
         }
     }
 
